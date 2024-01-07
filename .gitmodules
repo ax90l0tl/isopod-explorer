@@ -1,8 +1,8 @@
-[submodule "/pico-sdk"]
-	path = /pico-sdk
+[submodule "pico-sdk"]
+	path = pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk.git
-[submodule "/micro_ros_raspberrypi_pico_sdk"]
-	path = /micro_ros_raspberrypi_pico_sdk
+[submodule "micro_ros_raspberrypi_pico_sdk"]
+	path = micro_ros_raspberrypi_pico_sdk
 	url = https://github.com/micro-ROS/micro_ros_raspberrypi_pico_sdk.git
 	branch = foxy
 [submodule "picotool"]

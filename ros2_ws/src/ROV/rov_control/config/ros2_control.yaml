@@ -1,0 +1,11 @@
+controller_manager:
+  ros_parameters:
+    update_rate: 30
+    use_sim_time: true
+
+    effort_x:
+    effort_y:
+    pos_z:
+    pos_roll:
+    pos_pitch:
+    pos_yaw:

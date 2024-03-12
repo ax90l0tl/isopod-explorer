@@ -30,6 +30,9 @@ ament_target_dependencies(joy_command rclcpp sensor_msgs rov_msgs)
 
 install(TARGETS joy_command DESTINATION lib/${PROJECT_NAME})
 
+# Install launch files.
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights uncomment

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <ros2_control name="GazeboSystem" type="system">
+        <hardware>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+            <joint name="x_acceleration">
+                <command_interface name="effort">
+                    <param name="min">-10.0</param>
+                    <param name="max">10.0</param>
+                </command_interface>
+                <state_interface name="acceleration"/>
+            </joint>
+            <joint name="y_acceleration">
+                <command_interface name="effort">
+                    <param name="min">-10.0</param>
+                    <param name="max">10.0</param>
+                </command_interface>
+                <state_interface name="acceleration"/>
+            </joint>
+            <joint name="z_position">
+                <command_interface name="position">
+                </command_interface>
+                <state_interface name="acceleration"/>
+                <state_interface name="position"/>
+            </joint>
+            <joint name="roll">
+                <command_interface name="position">
+                    <param name="min">-1.0</param>
+                    <param name="max">1.0</param>
+                </command_interface>
+                <state_interface name="orientation"/>
+                <state_interface name="velocity"/>
+            </joint>
+            <joint name="pitch">
+                <command_interface name="effort">
+                    <param name="min">-1.0</param>
+                    <param name="max">1.0</param>
+                </command_interface>
+                <state_interface name="orientation"/>
+                <state_interface name="velocity"/>
+            </joint>
+            <joint name="yaw">
+                <command_interface name="effort">
+                    <param name="min">-1.0</param>
+                    <param name="max">1.0</param>
+                </command_interface>
+                <state_interface name="orientation"/>
+                <state_interface name="velocity"/>
+            </joint>
+        </hardware>
+    </ros2_control>
+
+    <gazebo>
+        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+            <parameters>...to be filled in soon!...</parameters>
+        </plugin>
+    </gazebo>
+</robot>

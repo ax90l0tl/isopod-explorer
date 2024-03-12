@@ -10,11 +10,11 @@ def generate_launch_description():
                 executable="joy_node",
                 name="joy",
                 parameters=[
-                    {"device_id": "0"},
+                    {"device_id": 0},
                     {"device_name": "OpenTX FrSky Taranis Joystick"},
-                    {"deadzone": "0.01"},
-                    {"autorepeat_rate": "20.0"},
-                    {"coalesce_interval_ms": "1"}
+                    {"deadzone": 0.01},
+                    {"autorepeat_rate": 20.0},
+                    {"coalesce_interval_ms": 1}
                 ],
             )
         ]

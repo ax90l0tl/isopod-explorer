@@ -12,12 +12,12 @@ Joy_cmd::Joy_cmd() : rclcpp::Node("joy_cmd")
 void Joy_cmd::joy_cb(const sensor_msgs::msg::Joy::SharedPtr msg)
 {
     auto output = rov_msgs::msg::Command();
-    output.command.force.x = msg->axes[2];
-    output.command.force.y = msg->axes[3];
-    output.command.force.z = msg->axes[0];
-    output.command.torque.x = msg->axes[5];
-    output.command.torque.y = msg->axes[6];
-    output.command.torque.z = msg->axes[1];
+    output.force.force.x = msg->axes[2];
+    output.force.force.y = msg->axes[3];
+    output.force.force.z = msg->axes[0];
+    output.force.torque.x = msg->axes[5];
+    output.force.torque.y = msg->axes[6];
+    output.force.torque.z = msg->axes[1];
     for(uint8_t i = 0; i < msg->buttons.size(); i++){
         output.buttons.push_back(msg->buttons[i]);
     }

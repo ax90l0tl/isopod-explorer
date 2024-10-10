@@ -1,0 +1,7 @@
+launch gazebo:
+
+ros2 launch ros_gz_sim gz_sim.launch.py
+
+spawn entity:
+
+ros2 run ros_gz_sim  create -topic robot_description -entity robot_name

@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:property name="prop_mesh_cw" value="package://rov_sim/meshes/T200_cw.dae"/>
+    <xacro:property name="prop_mesh_ccw" value="package://rov_sim/meshes/T200_ccw.dae"/>
+    <xacro:property name="prop_r" value="0.05"/>
+    <xacro:property name="prop_l" value="0.035"/>
+    
+    <!--  Thruster macro: joint + link + plugin -->
+    <xacro:macro name="thruster" params="thruster_id dir parent *origin">
+
+        <link name="${ns}/thruster${thruster_id}">
+
+            <visual>
+                <geometry>
+                    <xacro:if value="${dir == 'CW'}">
+                        <mesh filename="${prop_mesh_cw}"/>
+                    </xacro:if>
+                    <xacro:if value="${dir == 'CCW'}">
+                        <mesh filename="${prop_mesh_ccw}"/>
+                    </xacro:if>
+                </geometry>
+            </visual>
+            
+            <!-- <collision>
+                    <origin rpy="0 ${PI/2} 0"/>
+                <geometry>            
+                    <cylinder length="${prop_l}" radius="${prop_r}"/>
+                </geometry>
+            </collision> -->
+
+            <inertial>
+                <!-- thruster axis is X -->
+                <origin xyz="${prop_l/2} 0 0" rpy="0 0 0" />
+                <mass value="${prop_mass}" />
+                <inertia  izz="${prop_mass*prop_r*prop_r / 4  + prop_mass*prop_l*prop_l / 12}" ixy="0.0"  ixz="0.0"
+                            iyy="${prop_mass*prop_r*prop_r / 4  + prop_mass*prop_l*prop_l / 12}" iyz="0.0"
+                            ixx="${prop_mass*prop_r*prop_r / 2}" />
+            </inertial>
+        </link>
+
+        <!-- Joint between thruster link and vehicle base link -->    
+        <joint name="thruster${thruster_id}" type="continuous">
+            <parent link="${ns}/${parent}" />
+            <child link="${ns}/thruster${thruster_id}" />
+            <xacro:insert_block name="origin" />
+            <xacro:if value="${dir == 'CW'}">
+                <axis xyz="1 0 0" />
+            </xacro:if>
+            <xacro:if value="${dir == 'CCW'}">
+                <axis xyz="-1 0 0" />
+            </xacro:if>
+            <limits effort="-1" velocity="-1"/>
+        </joint>
+
+    <!-- ignition topic is /model/{ns}/joint/{joint_name}/cmd_pos -->
+    <xacro:if value="$(arg simulation)">
+        <gazebo>
+            <plugin
+                filename="gz-sim-thruster-system"
+                name="gz::sim::systems::Thruster">
+                <namespace>${ns}</namespace>
+                <joint_name>thruster${thruster_id}</joint_name>
+                <topic>thruster${thruster_id}/cmd</topic>
+                <thrust_coefficient>0.011</thrust_coefficient>
+                <fluid_density>${density}</fluid_density>
+                <propeller_diameter>${2*prop_r}</propeller_diameter>
+                <velocity_control>true</velocity_control>
+                <use_angvel_cmd>false</use_angvel_cmd>
+                <max_thrust_cmd>40</max_thrust_cmd>
+                <min_thrust_cmd>-40</min_thrust_cmd>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+    </xacro:macro>
+
+</robot>
+
+

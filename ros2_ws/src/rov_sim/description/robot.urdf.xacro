@@ -78,5 +78,13 @@
         <origin xyz="-0.2 -0.2 -0.07" rpy="0 -${pi/4} -${pi/2}" />
     </xacro:thruster>
 
+    <xacro:include filename="stereo_camera.xacro"/>
+    <xacro:stereo_camera parent="chassis">
+        <origin xyz="0.3 0 0" rpy="0 0 0" />
+    </xacro:stereo_camera>
+
+    <!-- <xacro:include filename="imu.xacro"/> -->
+    <!-- <xacro:include filename="depth_sensor.xacro"/> -->
+
 
 </robot>

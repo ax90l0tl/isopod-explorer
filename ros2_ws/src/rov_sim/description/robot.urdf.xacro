@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
 
-    <xacro:arg name="namespace" default="hi"/>
+    <xacro:arg name="namespace" default=""/>
     <xacro:arg name="simulation" default="true"/>
     <xacro:arg name="density" default="1000"/>
     
@@ -25,7 +25,10 @@
     <xacro:property name="z_cog" value="${-buoyant_correction*z_size}"/>
 
     <!-- Include the thruster Xacro file -->
-    <xacro:include filename="inertial_macros.xacro"/>
+    <xacro:include filename="$(find rov_sim)/description/inertial_macros.xacro"/>
+    <xacro:include filename="$(find rov_sim)/description/hydrodynamics.xacro"/>
+    <xacro:include filename="$(find rov_sim)/description/thruster.xacro"/>
+
 
     <link name="${ns}/base_link">
     </link>
@@ -44,20 +47,34 @@
                 <box size="0.3 0.3 0.05"/>
             </geometry>
         </visual>
+
         <collision>
-            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <origin xyz="0 0 ${z_cob}" rpy="0 0 0"/>
             <geometry>
-                <box size="0.5 0.6 0.4"/>
+                <box size="${x_size*buoyant_correction} ${y_size*buoyant_correction} ${z_size*buoyant_correction}"/>
             </geometry>
         </collision>
-        <xacro:inertial_box mass="0.5" x="0.5" y="0.6" z="0.4">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box>
+
+        <inertial>
+            <mass value="${mass}"/>
+            <origin xyz="0 0 ${z_cog}"/>
+            
+            <!-- BlueROV2 values from "Model Predictive Control for the BlueROV2", 
+                Emil Már Einarsson, Andris Lipenitis, Master thesis, 2020 
+                for now make Ignition crash?-->   
+            <!--         <inertia ixx="0.21" ixy="0.00" ixz="0.00" iyy="0.245" iyz="0.00" izz="0.245"/> -->
+            <inertia ixx="5.2539" ixy="0.0144" ixz="0.3341" iyy="7.9420" iyz="0.026" izz="6.9123"/>
+            
+                <!-- Perfect rectangle -->
+            <!--        <inertia
+            ixx="${mass/12*(y_size*y_size+z_size*z_size)}" ixy="0.0" ixz="0.0"
+            iyy="${mass/12*(x_size*x_size + z_size*z_size)}" iyz="0.0"
+            izz="${mass/12*(x_size*x_size + y_size*y_size)}" />-->
+        </inertial>
     </link>
 
 
     <!-- Add multiple thrusters with different positions and orientations -->
-    <xacro:include filename="thruster.xacro"/>
     
     <xacro:thruster thruster_id="0" dir="CW" parent="chassis">
         <origin xyz="0.2 0.2 0.07" rpy="0 ${pi/4} ${pi/2}" />
@@ -78,10 +95,10 @@
         <origin xyz="-0.2 -0.2 -0.07" rpy="0 -${pi/4} -${pi/2}" />
     </xacro:thruster>
 
-    <xacro:include filename="stereo_camera.xacro"/>
-    <xacro:stereo_camera parent="chassis">
+    <!-- <xacro:include filename="stereo_camera.xacro"/> -->
+    <!-- <xacro:stereo_camera parent="chassis">
         <origin xyz="0.3 0 0" rpy="0 0 0" />
-    </xacro:stereo_camera>
+    </xacro:stereo_camera> -->
 
     <!-- <xacro:include filename="imu.xacro"/> -->
     <!-- <xacro:include filename="depth_sensor.xacro"/> -->

@@ -104,4 +104,30 @@
     <!-- <xacro:include filename="depth_sensor.xacro"/> -->
 
 
+    <!-- other Gazebo plugins -->
+    <xacro:if value="$(arg simulation)">
+        <gazebo>
+            <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher"/>
+            
+            <plugin
+                filename="gz-sim-odometry-publisher-system"
+                name="gz::sim::systems::OdometryPublisher">
+                <odom_frame>world</odom_frame>
+                <dimensions>3</dimensions>
+                <robot_base_frame>${ns}/base_link</robot_base_frame>
+                <odom_publish_frequency>20</odom_publish_frequency>
+                <dimensions>3</dimensions>
+            </plugin>
+            
+            <plugin
+                filename="gz-sim-pose-publisher-system"
+                name="gz::sim::systems::PosePublisher">
+                <publish_link_pose>false</publish_link_pose>
+                <publish_collision_pose>false</publish_collision_pose>
+                <publish_visual_pose>false</publish_visual_pose>
+                <publish_nested_model_pose>true</publish_nested_model_pose>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+
 </robot>

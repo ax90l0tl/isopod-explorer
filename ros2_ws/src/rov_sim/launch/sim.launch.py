@@ -55,6 +55,29 @@ def generate_launch_description():
         launch_arguments={'gz_args': '-g -v4 '}.items()
     )
 
+    bridge_params = os.path.join(
+        get_package_share_directory('rov_sim'),
+        'config',
+        'ros_gz_bridge.yaml'
+    )
+
+    start_gazebo_ros_bridge_cmd = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '--ros-args',
+            '-p',
+            f'config_file:={bridge_params}',
+        ],
+        output='screen',
+    )
+
+    start_gazebo_ros_image_bridge_cmd = Node(
+        package='ros_gz_image',
+        executable='image_bridge',
+        arguments=['/camera/image_raw'],
+        output='screen',
+    )
 
     # Run the spawner node from the gazebo_ros package. The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(package='ros_gz_sim', executable='create',
@@ -66,14 +89,15 @@ def generate_launch_description():
                                    ],
                         output='screen')
 
-
+    ld = LaunchDescription()
 
     # Launch them all!
-    return LaunchDescription([
-        # set_env_vars_resources,
-        world_arg,
-        robot_desc,
-        gzserver_cmd,
-        gzclient_cmd,
-        spawn_entity,
-    ])
+    ld.add_action(start_gazebo_ros_bridge_cmd)
+    # ld.add_action(start_gazebo_ros_image_bridge_cmd)
+    ld.add_action(set_env_vars_resources)
+    ld.add_action(world_arg)
+    ld.add_action(robot_desc)
+    ld.add_action(gzserver_cmd)
+    ld.add_action(gzclient_cmd)
+    ld.add_action(spawn_entity)
+    return ld

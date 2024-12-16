@@ -10,6 +10,13 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+find_package(xacro REQUIRED)
+find_package(ros_gz_bridge REQUIRED)
+find_package(ros_gz_sim REQUIRED)
+find_package(ros_gz_image REQUIRED)
+find_package(robot_state_publisher REQUIRED)
+
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -24,7 +31,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY description launch meshes worlds
+  DIRECTORY description launch meshes worlds config rviz
   DESTINATION share/${PROJECT_NAME}
 )
 

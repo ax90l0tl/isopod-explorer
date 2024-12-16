@@ -49,7 +49,7 @@
             <xacro:if value="${dir == 'CCW'}">
                 <axis xyz="-1 0 0" />
             </xacro:if>
-            <!-- <limits effort="-1" velocity="-1"/> -->
+            <limits effort="51.48491"/>
         </joint>
 
     <!-- ignition topic is /model/{ns}/joint/{joint_name}/cmd_pos -->
@@ -60,7 +60,7 @@
                 name="gz::sim::systems::Thruster">
                 <namespace>${ns}</namespace>
                 <joint_name>thruster${thruster_id}</joint_name>
-                <topic>thruster${thruster_id}/cmd</topic>
+                <topic>${ns}/thruster${thruster_id}/cmd</topic>
                 <thrust_coefficient>0.011</thrust_coefficient>
                 <fluid_density>${density}</fluid_density>
                 <propeller_diameter>${2*prop_r}</propeller_diameter>

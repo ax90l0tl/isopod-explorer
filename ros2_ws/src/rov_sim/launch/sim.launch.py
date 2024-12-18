@@ -18,6 +18,12 @@ def generate_launch_description():
         'underwater_basic.world'
     )
 
+    namespace = LaunchConfiguration('name')
+    namespace_arg = DeclareLaunchArgument(
+        'name',
+        default_value='isopod',
+        description='robot namespace'
+    )
     world = LaunchConfiguration('world')
 
     world_arg = DeclareLaunchArgument(
@@ -89,9 +95,10 @@ def generate_launch_description():
                                    ],
                         output='screen')
 
+    # gives all nodes the namespace isopod (recursive)
     sim_w_namespace = GroupAction(
         actions=[
-            PushRosNamespace('isopod'),
+            PushRosNamespace(namespace),
             robot_desc,
             start_gazebo_ros_bridge_cmd,
             # gzserver_cmd,
@@ -105,6 +112,7 @@ def generate_launch_description():
     # Launch them all!
     # ld.add_action(start_gazebo_ros_bridge_cmd)
     # ld.add_action(start_gazebo_ros_image_bridge_cmd)
+    ld.add_action(namespace_arg)
     ld.add_action(sim_w_namespace)
     ld.add_action(set_env_vars_resources)
     ld.add_action(world_arg)

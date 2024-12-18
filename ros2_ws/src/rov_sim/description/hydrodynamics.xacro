@@ -8,7 +8,7 @@
             <!--     <density>${density}</density> -->
                 
             <link_name>${ns}/base_link</link_name>
-
+            <default_current>0.05 0.03 0.0</default_current>
                 
             <!-- BlueROV2 heavy values from "6-DoF Modelling and Control of a Remotely Operated Vehicle"
                 Wu, Master thesis, Flinder University, 2018  -->

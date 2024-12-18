@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
 
-    <xacro:arg name="namespace" default=""/>
+    <xacro:arg name="namespace" default="isopod"/>
     <xacro:arg name="simulation" default="true"/>
     <xacro:arg name="density" default="1000"/>
     
@@ -14,7 +14,6 @@
     <xacro:property name="z_size" value="0.1"/>
 
     <xacro:property name="mass" value="14.8"/>
-        
     <!-- other props -->
     <xacro:property name="prop_mass" value="0.07"/>
     <!-- to set correct buoyancy volume with 1 % positive factor -->
@@ -28,13 +27,14 @@
     <xacro:include filename="$(find rov_sim)/description/inertial_macros.xacro"/>
     <xacro:include filename="$(find rov_sim)/description/hydrodynamics.xacro"/>
     <xacro:include filename="$(find rov_sim)/description/thruster.xacro"/>
-
+    <xacro:include filename="$(find rov_sim)/description/sensors/imu.xacro"/>
+    <xacro:include filename="$(find rov_sim)/description/sensors/depth_sensor.xacro"/>
 
     <link name="${ns}/base_link">
     </link>
 
     <!-- Define the base link -->
-    <joint name="chassis_joint" type="fixed">
+    <joint name="${ns}/chassis_joint" type="fixed">
         <parent link="${ns}/base_link"/>
         <child link="${ns}/chassis"/>
         <origin xyz="0 0 0"/>
@@ -75,7 +75,6 @@
 
 
     <!-- Add multiple thrusters with different positions and orientations -->
-    
     <xacro:thruster thruster_id="0" dir="CW" parent="chassis">
         <origin xyz="0.2 0.2 0.07" rpy="0 ${pi/4} ${pi/2}" />
     </xacro:thruster>
@@ -95,19 +94,13 @@
         <origin xyz="-0.2 -0.2 -0.07" rpy="0 -${pi/4} -${pi/2}" />
     </xacro:thruster>
 
-    <!-- <xacro:include filename="stereo_camera.xacro"/> -->
-    <!-- <xacro:stereo_camera parent="chassis">
-        <origin xyz="0.3 0 0" rpy="0 0 0" />
-    </xacro:stereo_camera> -->
-
-    <!-- <xacro:include filename="imu.xacro"/> -->
-    <!-- <xacro:include filename="depth_sensor.xacro"/> -->
-
-
     <!-- other Gazebo plugins -->
     <xacro:if value="$(arg simulation)">
         <gazebo>
-            <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher"/>
+            <plugin 
+                filename="gz-sim-joint-state-publisher-system"
+                name="gz::sim::systems::JointStatePublisher">
+            </plugin>
             
             <plugin
                 filename="gz-sim-odometry-publisher-system"
@@ -116,6 +109,7 @@
                 <dimensions>3</dimensions>
                 <robot_base_frame>${ns}/base_link</robot_base_frame>
                 <odom_publish_frequency>20</odom_publish_frequency>
+                <!-- <odom_topic>${ns}/odometry</odom_topic> -->
                 <dimensions>3</dimensions>
             </plugin>
             

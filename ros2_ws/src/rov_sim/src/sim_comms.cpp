@@ -16,7 +16,6 @@ Sim_comms_node::Sim_comms_node() : rclcpp::Node("sim_comms")
     this->declare_parameter("gps_variance", 0.0);
     this->declare_parameter("n_thrusters", 6);
 
-
     int period = 1000 / this->get_parameter("depth_rate").as_int();
     depth_pub = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(this->get_parameter("depth_topic").as_string(), 10);
     depth_timer = this->create_wall_timer(chrono::milliseconds(period), bind(&Sim_comms_node::depth_Callback, this));
@@ -25,14 +24,16 @@ Sim_comms_node::Sim_comms_node() : rclcpp::Node("sim_comms")
     gps_pub = this->create_publisher<nav_msgs::msg::Odometry>(this->get_parameter("gps_topic").as_string(), 10);
     gps_timer = this->create_wall_timer(chrono::milliseconds(period), bind(&Sim_comms_node::gps_Callback, this));
 
-    for(uint8_t i = 0; i < this->get_parameter("n_thrusters").as_int(); i++){
+    for (uint8_t i = 0; i < this->get_parameter("n_thrusters").as_int(); i++)
+    {
         thruster_pub.push_back(this->create_publisher<std_msgs::msg::Float64>(string("thruster" + to_string(i)), 10));
     }
 
     odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(this->get_parameter("odom_topic").as_string(), 10, std::bind(&Sim_comms_node::odom_Callback, this, _1));
 }
 
-void Sim_comms_node::odom_Callback(const nav_msgs::msg::Odometry::SharedPtr msg){
+void Sim_comms_node::odom_Callback(const nav_msgs::msg::Odometry::SharedPtr msg)
+{
     odom = *msg;
 }
 
@@ -54,13 +55,17 @@ void Sim_comms_node::depth_Callback()
     depth_pub->publish(msg);
 }
 
-void Sim_comms_node::gps_Callback(){
-    auto msg = nav_msgs::msg::Odometry();
-    msg.header.stamp = this->now();
-    msg.header.frame_id = "gps";
-    msg.pose = odom.pose;
-    msg.twist = odom.twist;
-    gps_pub->publish(msg);
+void Sim_comms_node::gps_Callback()
+{
+    if (odom.pose.pose.position.z >= 0.1)
+    {
+        auto msg = nav_msgs::msg::Odometry();
+        msg.header.stamp = this->now();
+        msg.header.frame_id = "gps";
+        msg.pose = odom.pose;
+        msg.twist = odom.twist;
+        gps_pub->publish(msg);
+    }
 }
 
 int main(int argc, char *argv[])

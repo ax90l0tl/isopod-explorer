@@ -18,6 +18,8 @@
       name="gz::sim::systems::Sensors">
       <render_engine>ogre2</render_engine>
     </plugin>
+
+    <!-- Gazebo imu plugin handles all imu stuff -->
     <plugin
       filename="gz-sim-imu-system"
       name="gz::sim::systems::Imu">

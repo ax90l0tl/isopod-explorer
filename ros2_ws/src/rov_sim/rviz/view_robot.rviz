@@ -6,11 +6,9 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /RobotModel1
         - /RobotModel1/Status1
-        - /Odometry1
         - /Odometry1/Shape1
-        - /Effort1
+        - /Imu1
       Splitter Ratio: 0.5
     Tree Height: 542
   - Class: rviz_common/Selection
@@ -65,50 +63,54 @@ Visualization Manager:
         Value: /robot_description
       Enabled: true
       Links:
-        /base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        /chassis:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        /thruster0:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        /thruster1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        /thruster2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        /thruster3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        /thruster4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        /thruster5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        isopod/base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        isopod/chassis:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        isopod/imu:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        isopod/thruster0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        isopod/thruster1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        isopod/thruster2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        isopod/thruster3:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        isopod/thruster4:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        isopod/thruster5:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -175,6 +177,34 @@ Visualization Manager:
         Value: /joint_states
       Value: false
       Width: 0.019999999552965164
+    - Acceleration properties:
+        Acc. vector alpha: 1
+        Acc. vector color: 255; 0; 0
+        Acc. vector scale: 1
+        Derotate acceleration: true
+        Enable acceleration: false
+      Axes properties:
+        Axes scale: 1
+        Enable axes: true
+      Box properties:
+        Box alpha: 1
+        Box color: 255; 0; 0
+        Enable box: false
+        x_scale: 1
+        y_scale: 1
+        z_scale: 1
+      Class: rviz_imu_plugin/Imu
+      Enabled: true
+      Name: Imu
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        Filter size: 10
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /imu
+      Value: true
+      fixed_frame_orientation: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -221,25 +251,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 2.7344207763671875
+      Distance: 4.508465766906738
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.3300918340682983
-        Y: 1.3889957666397095
-        Z: -0.34169143438339233
+        X: 1.0926874876022339
+        Y: 1.4899259805679321
+        Z: -0.34169137477874756
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.390397846698761
+      Pitch: 0.4103979468345642
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.3353967666625977
+      Yaw: 4.125397682189941
     Saved: ~
 Window Geometry:
   Displays:
@@ -257,5 +287,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 2440
-  Y: 68
+  X: 2446
+  Y: 95

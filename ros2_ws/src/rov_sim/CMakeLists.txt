@@ -15,7 +15,24 @@ find_package(ros_gz_bridge REQUIRED)
 find_package(ros_gz_sim REQUIRED)
 find_package(ros_gz_image REQUIRED)
 find_package(robot_state_publisher REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
+include_directories(include/${PROJECT_NAME})
+
+add_executable(sim_comms src/sim_comms.cpp)
+ament_target_dependencies(sim_comms rclcpp std_msgs geometry_msgs nav_msgs)
+
+target_include_directories(
+  sim_comms PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+             "$<INSTALL_INTERFACE:include>")
+
+
+install(TARGETS
+  sim_comms
+  DESTINATION lib/${PROJECT_NAME})
 
 
 if(BUILD_TESTING)

@@ -39,7 +39,7 @@
         </link>
 
         <!-- Joint between thruster link and vehicle base link -->    
-        <joint name="thruster${thruster_id}" type="continuous">
+        <joint name="${ns}/thruster${thruster_id}_joint" type="continuous">
             <xacro:insert_block name="origin" />
             <parent link="${ns}/${parent}" />
             <child link="${ns}/thruster${thruster_id}" />
@@ -58,9 +58,8 @@
             <plugin
                 filename="gz-sim-thruster-system"
                 name="gz::sim::systems::Thruster">
-                <namespace>${ns}</namespace>
-                <joint_name>thruster${thruster_id}</joint_name>
-                <topic>${ns}/thruster${thruster_id}/cmd</topic>
+                <joint_name>${ns}/thruster${thruster_id}_joint</joint_name>
+                <topic>thruster${thruster_id}/cmd</topic>
                 <thrust_coefficient>0.011</thrust_coefficient>
                 <fluid_density>${density}</fluid_density>
                 <propeller_diameter>${2*prop_r}</propeller_diameter>

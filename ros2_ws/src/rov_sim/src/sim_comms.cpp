@@ -57,7 +57,7 @@ void Sim_comms_node::depth_Callback()
 
 void Sim_comms_node::gps_Callback()
 {
-    if (odom.pose.pose.position.z >= 0.1)
+    if (odom.pose.pose.position.z >= -0.5)
     {
         auto msg = nav_msgs::msg::Odometry();
         msg.header.stamp = this->now();

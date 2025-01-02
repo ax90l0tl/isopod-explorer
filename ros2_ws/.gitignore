@@ -1,3 +1,5 @@
 install/
 build/
 log/
+.vscode/
+src/.vscode/

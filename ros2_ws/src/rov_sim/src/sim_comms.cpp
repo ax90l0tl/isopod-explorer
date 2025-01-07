@@ -10,6 +10,7 @@ Sim_comms_node::Sim_comms_node() : rclcpp::Node("sim_comms")
     this->declare_parameter("depth_topic", "depth_sensor");
     this->declare_parameter("gps_topic", "gps");
     this->declare_parameter("odom_topic", "odom");
+    this->declare_parameter("thruster_topic", "thruster_command");
     this->declare_parameter("depth_mean", 0.0);
     this->declare_parameter("depth_variance", 0.0);
     this->declare_parameter("gps_mean", 0.0);
@@ -23,18 +24,36 @@ Sim_comms_node::Sim_comms_node() : rclcpp::Node("sim_comms")
     period = 1000 / this->get_parameter("gps_rate").as_int();
     gps_pub = this->create_publisher<nav_msgs::msg::Odometry>(this->get_parameter("gps_topic").as_string(), 10);
     gps_timer = this->create_wall_timer(chrono::milliseconds(period), bind(&Sim_comms_node::gps_Callback, this));
-
+    thruster_pub.resize(this->get_parameter("n_thrusters").as_int());
     for (uint8_t i = 0; i < this->get_parameter("n_thrusters").as_int(); i++)
     {
-        thruster_pub.push_back(this->create_publisher<std_msgs::msg::Float64>(string("thruster" + to_string(i)), 10));
+        thruster_pub[i] = this->create_publisher<std_msgs::msg::Float64>(string("thruster" + to_string(i)), 10);
     }
 
     odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(this->get_parameter("odom_topic").as_string(), 10, std::bind(&Sim_comms_node::odom_Callback, this, _1));
+    thruster_sub = this->create_subscription<rov_msgs::msg::ThrusterCommand>(this->get_parameter("thruster_topic").as_string(), 10, std::bind(&Sim_comms_node::thruster_Callback, this, _1));
 }
 
 void Sim_comms_node::odom_Callback(const nav_msgs::msg::Odometry::SharedPtr msg)
 {
     odom = *msg;
+}
+
+void Sim_comms_node::thruster_Callback(const rov_msgs::msg::ThrusterCommand::SharedPtr msg)
+{
+    auto msg_out = std_msgs::msg::Float64();
+    for (uint8_t i = 0; i < msg->thrusters.size(); i++)
+    {
+        if (thruster_pub[i] == nullptr)
+        {
+            RCLCPP_ERROR(this->get_logger(), "Publisher at index %zu is invalid (nullptr)", i);
+        }
+        else
+        {
+            msg_out.data = msg->thrusters[i];
+            thruster_pub[i]->publish(msg_out);
+        }
+    }
 }
 
 void Sim_comms_node::depth_Callback()

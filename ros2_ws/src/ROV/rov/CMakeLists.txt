@@ -25,13 +25,7 @@ find_package(rov_msgs REQUIRED)
 
 include_directories(include/${PROJECT_NAME})
 
-add_executable(joy_command src/joy_command.cpp)
-ament_target_dependencies(joy_command rclcpp sensor_msgs rov_msgs)
-
-install(TARGETS joy_command DESTINATION lib/${PROJECT_NAME})
-
-# Install launch files.
-install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)
+install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

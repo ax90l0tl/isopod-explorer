@@ -95,14 +95,16 @@ def generate_launch_description():
                                    ],
                         output='screen')
 
+    sim_comms = Node(package='rov_sim', executable='sim_comms',
+                    output='screen')
+
     # gives all nodes the namespace isopod (recursive)
     sim_w_namespace = GroupAction(
         actions=[
             PushRosNamespace(namespace),
             robot_desc,
             start_gazebo_ros_bridge_cmd,
-            # gzserver_cmd,
-            # gzclient_cmd,
+            sim_comms,
             spawn_entity
         ]
     )
@@ -116,8 +118,6 @@ def generate_launch_description():
     ld.add_action(sim_w_namespace)
     ld.add_action(set_env_vars_resources)
     ld.add_action(world_arg)
-    # ld.add_action(robot_desc)
     ld.add_action(gzserver_cmd)
     ld.add_action(gzclient_cmd)
-    # ld.add_action(spawn_entity)
     return ld

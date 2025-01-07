@@ -1,5 +1,9 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
+import os
+from ament_index_python.packages import get_package_share_directory
+import yaml
+import pathlib
 
 
 def generate_launch_description():
@@ -10,12 +14,18 @@ def generate_launch_description():
                 executable="joy_node",
                 name="joy",
                 parameters=[
-                    {"device_id": 0},
-                    {"device_name": "OpenTX FrSky Taranis Joystick"},
-                    {"deadzone": 0.01},
-                    {"autorepeat_rate": 20.0},
-                    {"coalesce_interval_ms": 1}
+                os.path.join(get_package_share_directory("bur_rov"), 'config', 'taranis.yaml')
                 ],
-            )
+            ),
+            Node(
+                package="bur_rov",
+                executable="joy_command",
+                name="joy_command",
+                parameters=[
+                    {"using_joy": True},
+                    {"using_ekf": False},
+                os.path.join(get_package_share_directory("bur_rov"), 'config', 'taranis.yaml')
+                ],
+            ),
         ]
     )

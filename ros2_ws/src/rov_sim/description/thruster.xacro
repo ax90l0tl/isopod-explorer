@@ -21,13 +21,6 @@
                 </geometry>
             </visual>
             
-            <!-- <collision>
-                    <origin rpy="0 ${pi/2} 0"/>
-                <geometry>            
-                    <cylinder length="${prop_l}" radius="${prop_r}"/>
-                </geometry>
-            </collision> -->
-
             <inertial>
                 <!-- thruster axis is X -->
                 <origin xyz="${prop_l/2} 0 0" rpy="0 0 0" />
@@ -52,7 +45,6 @@
             <limits effort="51.48491"/>
         </joint>
 
-    <!-- ignition topic is /model/{ns}/joint/{joint_name}/cmd_pos -->
     <!-- <xacro:if value="$(arg simulation)"> -->
         <gazebo>
             <plugin

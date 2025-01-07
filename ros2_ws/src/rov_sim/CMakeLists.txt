@@ -19,11 +19,12 @@ find_package(nav_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(rov_msgs REQUIRED)
 
 include_directories(include/${PROJECT_NAME})
 
 add_executable(sim_comms src/sim_comms.cpp)
-ament_target_dependencies(sim_comms rclcpp std_msgs geometry_msgs nav_msgs)
+ament_target_dependencies(sim_comms rclcpp std_msgs geometry_msgs nav_msgs rov_msgs)
 
 target_include_directories(
   sim_comms PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"

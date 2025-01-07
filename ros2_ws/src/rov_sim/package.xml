@@ -16,6 +16,7 @@
   <depend>ros_gz_sim</depend>
   <depend>ros_gz_image</depend>
   <depend>robot_state_publisher</depend>
+  <depend>rov_msgs</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

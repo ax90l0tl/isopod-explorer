@@ -20,6 +20,26 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(rov_msgs REQUIRED)
+find_package(rov REQUIRED)
+
+include_directories(include/${PROJECT_NAME})
+
+add_executable(thruster_manager src/thruster_manager.cpp src/CommonFunc.cpp)
+ament_target_dependencies(thruster_manager rclcpp rov_msgs geometry_msgs)
+
+target_include_directories(
+  thruster_manager
+  PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+         "$<INSTALL_INTERFACE:include>")
+
+install(TARGETS
+  thruster_manager
+  DESTINATION lib/${PROJECT_NAME})
+
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

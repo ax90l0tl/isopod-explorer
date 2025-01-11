@@ -19,7 +19,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('rov_thruster'), 'launch'),
             '/thruster_manager.launch.py'
-        ])
+        ]), launch_arguments={'use_sim_time': 'true'}.items()
     )
 
 
@@ -34,7 +34,7 @@ def generate_launch_description():
     ld = LaunchDescription()
 
     # Launch them all!
-    # ld.add_action(thruster_manager)
+    ld.add_action(thruster_manager)
     ld.add_action(namespace_arg)
-    ld.add_action(sim_w_namespace)
+    # ld.add_action(sim_w_namespace)
     return ld

@@ -16,13 +16,13 @@ Thruster_manager::Thruster_manager() : rclcpp::Node("thruster_manager")
     this->declare_parameter("max_torque", 80.0);
     this->declare_parameter("num_motors", 8);
     // Parameter Lists
-    const std::map<std::string, double> &motor = {{"surge", 0.0}, {"sway", 0.0}, {"heave", 0.0}, {"roll", 0.0}, {"pitch", 0.0}, {"yaw", 0.0}};
+    const std::map<std::string, double> &motor = {{"surge", 0.0}, {"sway", 0.0}, {"heave", 0.0}, {"roll", 0.0}, {"pitch", 0.0}, {"yaw", 0.0}, {"dir", 1.0}};
     for (int i = 0; i < this->get_parameter("num_motors").as_int(); i++)
     {
         this->declare_parameters(string("motor" + to_string(i)), motor);
     }
 
-    cmd_sub = this->create_subscription<rov_msgs::msg::Command>(
+    cmd_sub = this->create_subscription<rov_msgs::msg::AuxComm>(
         this->get_parameter("cmd_sub_topic").as_string(), 1, std::bind(&Thruster_manager::cmd_Callback, this, _1));
     wrench_sub = this->create_subscription<geometry_msgs::msg::WrenchStamped>(
         this->get_parameter("wrench_sub_topic").as_string(), 1, std::bind(&Thruster_manager::wrench_Callback, this, _1));
@@ -73,6 +73,8 @@ void Thruster_manager::setVariables()
 
     last_motor_command.resize(num_motors, 0);
     motor_command.resize(num_motors, 0);
+    motor_dir.resize(num_motors, 0);
+    motors.resize(num_motors);
     for (int i = 0; i < num_motors; ++i)
     {
         motors[i]["surge"] = this->get_parameter(string("motor" + to_string(i) + ".surge")).as_double();
@@ -81,10 +83,11 @@ void Thruster_manager::setVariables()
         motors[i]["roll"] = this->get_parameter(string("motor" + to_string(i) + ".roll")).as_double();
         motors[i]["pitch"] = this->get_parameter(string("motor" + to_string(i) + ".pitch")).as_double();
         motors[i]["yaw"] = this->get_parameter(string("motor" + to_string(i) + ".yaw")).as_double();
+        motor_dir[i] = this->get_parameter(string("motor" + to_string(i) + ".dir")).as_double();
     }
 }
 
-void Thruster_manager::cmd_Callback(const rov_msgs::msg::Command::SharedPtr msg)
+void Thruster_manager::cmd_Callback(const rov_msgs::msg::AuxComm::SharedPtr msg)
 {
     this->output.auxilary.clear();
     this->output.buttons.clear();
@@ -127,9 +130,10 @@ void Thruster_manager::wrench_Callback(const geometry_msgs::msg::WrenchStamped::
     for (size_t i = 0; i < motors.size(); ++i)
     {
         // double m_comms = thrust_to_motor_comm(motor_command[i]);
-        // motor_comms[i] = rateLimitMotorCommand(m_comms, last_motor_command[i]);
+        // motor_comms[i] = rateLimitMotorCommand(motor_dir[i]*m_comms, last_motor_command[i]);
+        // motor_comms[i] = std::clamp(motor_comms[i], float(-1.0), float(1.0));
         motor_comms[i] = motor_command[i];
-        output.thrusters.push_back(motor_comms[i]);
+        output.thrusters.push_back(motor_dir[i]*motor_comms[i]);
         // Store the last command so we can ramp it
         last_motor_command[i] = motor_comms[i];
     }
@@ -157,9 +161,9 @@ double Thruster_manager::thrust_to_motor_comm(const double thrust_n)
 
 double Thruster_manager::rateLimitMotorCommand(double new_command, double last_command) const
 {
-    if (abs(last_command) < MOTOR_DRIVER_DEADBAND && abs(new_command) >= MOTOR_DRIVER_DEADBAND)
+    if (abs(new_command) <= MOTOR_DRIVER_DEADBAND)
     {
-        return std::copysign(MOTOR_DRIVER_DEADBAND, new_command);
+        return 0;
     }
     else
     {

@@ -1,53 +1,53 @@
-isopod:
-  thruster_manager:
-    ros__parameters:
-      force_max: 60
-      motor0:
-        heave: -0.296241
-        pitch: 2.481076
-        roll: -1.764503
-        surge: -0.003225
-        sway: 0.35126
-        yaw: 0.0
-      motor1:
-        heave: -0.0
-        pitch: 0.0
-        roll: -2.208647
-        surge: 0.5
-        sway: 0.068868
-        yaw: -3.10559
-      motor2:
-        heave: -0.410866
-        pitch: -2.481076
-        roll: -1.764503
-        surge: 0.003225
-        sway: -0.355847
-        yaw: 0.0
-      motor3:
-        heave: 0.296241
-        pitch: -2.481076
-        roll: -1.764503
-        surge: 0.003225
-        sway: 0.35126
-        yaw: 0.0
-      motor4:
-        heave: -0.0
-        pitch: 0.0
-        roll: -2.208647
-        surge: -0.5
-        sway: 0.068868
-        yaw: -3.10559
-      motor5:
-        heave: 0.410866
-        pitch: 2.481076
-        roll: -1.764503
-        surge: -0.003225
-        sway: -0.355847
-        yaw: -0.0
-      motor_driver_deadband: 0.0625
-      num_motors: 6
-      rate_limit: 0.3
-      thrust_deadband: 0.00001
-      thrust_max_bwd: 4.1
-      thrust_max_fwd: 5.25
-      torque_max: 80
+thruster_manager:
+  ros__parameters:
+    force_max: 60
+    motor0:
+      dir: -1.0
+      heave: -0.296241
+      pitch: 2.481076
+      roll: -1.764503
+      surge: -0.003225
+      sway: 0.35126
+      yaw: 0.0
+    motor1:
+      dir: -1.0
+      heave: 0.0
+      pitch: -0.0
+      roll: 2.208647
+      surge: -0.5
+      sway: -0.068868
+      yaw: 3.10559
+    motor2:
+      dir: 1.0
+      heave: 0.410866
+      pitch: 2.481076
+      roll: 1.764503
+      surge: -0.003225
+      sway: 0.355847
+      yaw: -0.0
+    motor3:
+      dir: 1.0
+      heave: -0.296241
+      pitch: 2.481076
+      roll: 1.764503
+      surge: -0.003225
+      sway: -0.35126
+      yaw: -0.0
+    motor4:
+      dir: 1.0
+      heave: -0.0
+      pitch: 0.0
+      roll: -2.208647
+      surge: -0.5
+      sway: 0.068868
+      yaw: -3.10559
+    motor5:
+      dir: -1.0
+      heave: 0.410866
+      pitch: 2.481076
+      roll: -1.764503
+      surge: -0.003225
+      sway: -0.355847
+      yaw: -0.0
+    num_motors: 6
+    torque_max: 80

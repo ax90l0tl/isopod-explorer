@@ -42,7 +42,7 @@
             <xacro:if value="${dir == 'CCW'}">
                 <axis xyz="-1 0 0" />
             </xacro:if>
-            <limits effort="51.48491"/>
+            <limits effort="-1" velocity="-1"/>
         </joint>
 
     <!-- <xacro:if value="$(arg simulation)"> -->
@@ -52,11 +52,13 @@
                 name="gz::sim::systems::Thruster">
                 <joint_name>${ns}/thruster${thruster_id}_joint</joint_name>
                 <topic>thruster${thruster_id}/cmd</topic>
-                <thrust_coefficient>0.011</thrust_coefficient>
+                <!-- <use_angvel_cmd>true</use_angvel_cmd> -->
+                <!-- <velocity_control>false</velocity_control> -->
+                <!-- <thrust_coefficient>80.2073</thrust_coefficient> -->
                 <fluid_density>${density}</fluid_density>
                 <propeller_diameter>${2*prop_r}</propeller_diameter>
-                <velocity_control>false</velocity_control>
-                <use_angvel_cmd>false</use_angvel_cmd>
+                <!-- <max_thrust_cmd>1.2805</max_thrust_cmd> -->
+                <!-- <min_thrust_cmd>-1.0</min_thrust_cmd> -->
                 <max_thrust_cmd>51.48491</max_thrust_cmd>
                 <min_thrust_cmd>-40.2073</min_thrust_cmd>
             </plugin>

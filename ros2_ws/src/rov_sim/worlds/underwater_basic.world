@@ -78,6 +78,11 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
 
+    <plugin 
+        filename="gz-sim-navsat-system"
+        name="gz::sim::systems::NavSat">
+    </plugin>
+
     <physics type="ode">
       <real_time_update_rate>100.0</real_time_update_rate>
       <max_step_size>0.01</max_step_size>

@@ -14,7 +14,7 @@
 #include "rclcpp/rclcpp.hpp"
 
 #include "rov_msgs/msg/thruster_command.hpp"
-#include "rov_msgs/msg/command.hpp"
+#include "rov_msgs/msg/aux_comm.hpp"
 #include "geometry_msgs/msg/wrench_stamped.hpp"
 // #include <eigen3/Dense>
 // #include <eigen3/Sparse>
@@ -48,20 +48,21 @@ private:
     void setVariables();
     void allocate_generic_motors(std::map<std::string, double> &des_forces, std::vector<double> &des_motor_thrusts);
     double rateLimitMotorCommand(double new_command, double last_command) const;
-    void cmd_Callback(const rov_msgs::msg::Command::SharedPtr msg);
+    void cmd_Callback(const rov_msgs::msg::AuxComm::SharedPtr msg);
     void wrench_Callback(const geometry_msgs::msg::WrenchStamped::SharedPtr msg);
     void power_off();
     // Ros stuff
     rclcpp::Subscription<geometry_msgs::msg::WrenchStamped>::SharedPtr wrench_sub;
-    rclcpp::Subscription<rov_msgs::msg::Command>::SharedPtr cmd_sub;
+    rclcpp::Subscription<rov_msgs::msg::AuxComm>::SharedPtr cmd_sub;
     rclcpp::Publisher<rov_msgs::msg::ThrusterCommand>::SharedPtr thrust_cmd_pub;
     rov_msgs::msg::ThrusterCommand output;
 
     // Variables
-    map<int, std::map<std::string, double>> motors;
+    vector<std::map<std::string, double>> motors;
+    vector<float> motor_dir;
     int8_t num_motors;
-    vector<double> motor_command;
-    vector<double> last_motor_command;
+    vector<float> motor_command;
+    vector<float> last_motor_command;
 
     double max_step_per_loop;
     double MOTOR_FORWARD_BACKWARD_RATIO; // BlueROV T200 produce 5.25kgf forward, 4.1 kgf backwards, at 16V

@@ -6,7 +6,6 @@ Sim_comms_node::Sim_comms_node() : rclcpp::Node("sim_comms")
 {
     // Declare Parameters
     this->declare_parameter("depth_rate", 30);
-    this->declare_parameter("gps_rate", 5);
     this->declare_parameter("depth_topic", "depth_sensor");
     this->declare_parameter("gps_topic", "gps");
     this->declare_parameter("odom_topic", "odom");
@@ -21,9 +20,7 @@ Sim_comms_node::Sim_comms_node() : rclcpp::Node("sim_comms")
     depth_pub = this->create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(this->get_parameter("depth_topic").as_string(), 10);
     depth_timer = this->create_wall_timer(chrono::milliseconds(period), bind(&Sim_comms_node::depth_Callback, this));
 
-    period = 1000 / this->get_parameter("gps_rate").as_int();
-    gps_pub = this->create_publisher<nav_msgs::msg::Odometry>(this->get_parameter("gps_topic").as_string(), 10);
-    gps_timer = this->create_wall_timer(chrono::milliseconds(period), bind(&Sim_comms_node::gps_Callback, this));
+    gps_pub = this->create_publisher<sensor_msgs::msg::NavSatFix>(this->get_parameter("gps_topic").as_string(), 10);
     thruster_pub.resize(this->get_parameter("n_thrusters").as_int());
     for (uint8_t i = 0; i < this->get_parameter("n_thrusters").as_int(); i++)
     {
@@ -32,6 +29,7 @@ Sim_comms_node::Sim_comms_node() : rclcpp::Node("sim_comms")
 
     odom_sub = this->create_subscription<nav_msgs::msg::Odometry>(this->get_parameter("odom_topic").as_string(), 10, std::bind(&Sim_comms_node::odom_Callback, this, _1));
     thruster_sub = this->create_subscription<rov_msgs::msg::ThrusterCommand>(this->get_parameter("thruster_topic").as_string(), 10, std::bind(&Sim_comms_node::thruster_Callback, this, _1));
+    gps_sub = this->create_subscription<sensor_msgs::msg::NavSatFix>(this->get_parameter("gps_topic").as_string(), 10, std::bind(&Sim_comms_node::gps_Callback, this, _1));
 }
 
 void Sim_comms_node::odom_Callback(const nav_msgs::msg::Odometry::SharedPtr msg)
@@ -46,7 +44,7 @@ void Sim_comms_node::thruster_Callback(const rov_msgs::msg::ThrusterCommand::Sha
     {
         if (thruster_pub[i] == nullptr)
         {
-            RCLCPP_ERROR(this->get_logger(), "Publisher at index %zu is invalid (nullptr)", i);
+            RCLCPP_ERROR(this->get_logger(), "Publisher at index %zu is invalid (nullptr)", size_t(i));
         }
         else
         {
@@ -61,7 +59,7 @@ void Sim_comms_node::depth_Callback()
     // Has to be a pose message for the robot localization ekf
     auto msg = geometry_msgs::msg::PoseWithCovarianceStamped();
     msg.header.stamp = this->now();
-    msg.header.frame_id = "depth_sensor";
+    msg.header.frame_id = "Bar30";
     // Covariance values are taken from https://bluerobotics.com/store/sensors-cameras/sensors/bar30-sensor-r1/
     // but not sure how correctly I filled out the matrix
     msg.pose.pose.position.z = odom.pose.pose.position.z;
@@ -74,16 +72,13 @@ void Sim_comms_node::depth_Callback()
     depth_pub->publish(msg);
 }
 
-void Sim_comms_node::gps_Callback()
+void Sim_comms_node::gps_Callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg)
 {
     if (odom.pose.pose.position.z >= -0.5)
     {
-        auto msg = nav_msgs::msg::Odometry();
-        msg.header.stamp = this->now();
-        msg.header.frame_id = "gps";
-        msg.pose = odom.pose;
-        msg.twist = odom.twist;
-        gps_pub->publish(msg);
+        auto msg_out = sensor_msgs::msg::NavSatFix();
+        msg_out = *msg;
+        gps_pub->publish(msg_out);
     }
 }
 

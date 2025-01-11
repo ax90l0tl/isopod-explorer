@@ -1,6 +1,5 @@
-
 thruster_manager:
-  ros_parameters:
+  ros__parameters:
     # T200 Profile
     thrust_max_fwd: 5.25  # kg-f @ 16V
     thrust_max_bwd: 4.1 # kg-f @ 16V

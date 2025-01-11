@@ -1,2 +1,4 @@
-float32[] auxilary
-bool[] buttons
+std_msgs/Header header
+geometry_msgs/Pose pos_control
+geometry_msgs/Twist vel_control
+geometry_msgs/Wrench force_control

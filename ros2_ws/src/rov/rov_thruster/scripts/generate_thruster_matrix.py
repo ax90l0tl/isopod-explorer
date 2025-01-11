@@ -51,7 +51,7 @@ coordinate_system_in = CoordinateSystems.ENU
 coordinate_system_out = CoordinateSystems.ENU
 filename = 'motor_force_config_ENU.yaml'
 # Full path to the output file
-output_path = os.path.join('src/ROV/rov/config', filename)
+output_path = os.path.join('src/rov/rov/config', filename)
 # Thruster locations (m) relative to CoM
 # Location of center of mass from vehicle origin
 CoM = np.array([-14.6, 0, -1.3]) / 1000
@@ -74,9 +74,9 @@ s = np.sin(np.deg2rad(deg))
 c = np.cos(np.deg2rad(deg))
 thruster_orientations = np.array([
                                 [0, c, -s],
-                                [1, 0, 0],
-                                [0, -c, -s],
+                                [-1, 0, 0],
                                 [0, c, s],
+                                [0, -c, -s],
                                 [-1, 0, 0],
                                 [0, -c, s]
                                 ])
@@ -104,10 +104,12 @@ print("Ainv\n", Ainv)
 Ainv = Ainv.tolist()
 
 # Restructure the Ainv matrix into the desired format
+motor_dir = np.array([-1.0, -1.0, 1.0, 1.0, 1.0, -1.0]).tolist()
 motors_data = {}
 print(len(Ainv))
 for i in range(len(Ainv)):
     motor_data = {
+        'dir': motor_dir[i],
         'surge': Ainv[i][0],
         'sway': Ainv[i][1],
         'heave': Ainv[i][2],
@@ -123,14 +125,7 @@ yaml_data = {
         'ros__parameters': {
            "force_max": 60,
            "torque_max": 80,
-            # T200 Profile
-            "thrust_max_fwd": 5.25,  # kg-f @ 16V
-            "thrust_max_bwd": 4.1, # kg-f @ 16V
-            "thrust_deadband": 0.000001,
-            "motor_driver_deadband": 0.0625, # Scale from 0 to 1
-
             # Control Profile
-            "rate_limit": 0.3,
             'num_motors': len(Ainv),
             **motors_data
         }

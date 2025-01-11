@@ -6,61 +6,67 @@
   direction: GZ_TO_ROS
   
 - ros_topic_name: "joint_states"
-  gz_topic_name: "/world/default/model/isopod/joint_state"
+  gz_topic_name: "/world/default/model/robot/joint_state"
   ros_type_name: "sensor_msgs/msg/JointState"
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
 
 - ros_topic_name: "odom"
-  gz_topic_name: "/model/isopod/odometry_with_covariance"
+  gz_topic_name: "/model/robot/odometry_with_covariance"
   ros_type_name: "nav_msgs/msg/Odometry"
   gz_type_name: "gz.msgs.OdometryWithCovariance"
   direction: GZ_TO_ROS
 
 - ros_topic_name: "tf"
-  gz_topic_name: "/model/isopod/pose"
+  gz_topic_name: "/model/robot/pose"
   ros_type_name: "tf2_msgs/msg/TFMessage"
   gz_type_name: "gz.msgs.Pose_V"
   direction: GZ_TO_ROS 
 
 - ros_topic_name: "imu"
-  gz_topic_name: "/isopod/imu"
+  gz_topic_name: "/imu"
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
 
+- ros_topic_name: "gps"
+  gz_topic_name: "/gps"
+  ros_type_name: "sensor_msgs/msg/NavSatFix"
+  gz_type_name: "gz.msgs.NavSat"
+  direction: GZ_TO_ROS
+
 - ros_topic_name: "thruster0"
-  gz_topic_name: "/isopod/thruster0/cmd"
+  gz_topic_name: "/robot/thruster0/cmd"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ
 
 - ros_topic_name: "thruster1"
-  gz_topic_name: "/isopod/thruster1/cmd"
+  gz_topic_name: "/robot/thruster1/cmd"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ
 
 - ros_topic_name: "thruster2"
-  gz_topic_name: "/isopod/thruster2/cmd"
+  gz_topic_name: "/robot/thruster2/cmd"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ
 
 - ros_topic_name: "thruster3"
-  gz_topic_name: "/isopod/thruster3/cmd"
+  gz_topic_name: "/robot/thruster3/cmd"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ
 
 - ros_topic_name: "thruster4"
-  gz_topic_name: "/isopod/thruster4/cmd"
+  gz_topic_name: "/robot/thruster4/cmd"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ
 
 - ros_topic_name: "thruster5"
-  gz_topic_name: "/isopod/thruster5/cmd"
+  gz_topic_name: "/robot/thruster5/cmd"
   ros_type_name: "std_msgs/msg/Float64"
   gz_type_name: "gz.msgs.Double"
   direction: ROS_TO_GZ

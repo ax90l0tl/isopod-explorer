@@ -2,7 +2,6 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
 
 
-    <xacro:arg name="namespace" default=""/>
     <xacro:arg name="simulation" default="true"/>
     <xacro:arg name="density" default="1000"/>
     
@@ -24,24 +23,24 @@
     <xacro:property name="z_cog" value="${-buoyant_correction*z_size}"/>
 
     <!-- Include the thruster Xacro file -->
-    <xacro:include filename="$(find rov_sim)/description/inertial_macros.xacro"/>
-    <xacro:include filename="$(find rov_sim)/description/hydrodynamics.xacro"/>
-    <xacro:include filename="$(find rov_sim)/description/thruster.xacro"/>
-    <xacro:include filename="$(find rov_sim)/description/sensors/imu.xacro"/>
-    <xacro:include filename="$(find rov_sim)/description/sensors/depth_sensor.xacro"/>
-    <xacro:include filename="$(find rov_sim)/description/sensors/gps.xacro"/>
+    <xacro:include filename="$(find rov_description)/description/inertial_macros.xacro"/>
+    <xacro:include filename="$(find rov_description)/description/thruster.xacro"/>
+    <xacro:include filename="$(find rov_description)/description/sensors/imu.xacro"/>
+    <xacro:include filename="$(find rov_description)/description/sensors/depth_sensor.xacro"/>
+    <xacro:include filename="$(find rov_description)/description/sensors/gps.xacro"/>
+    <xacro:include filename="$(find rov_control)/description/ros2_control.xacro"/>
 
-    <link name="${ns}/base_link">
+    <link name="base_link">
     </link>
 
     <!-- Define the base link -->
-    <joint name="${ns}/chassis_joint" type="fixed">
-        <parent link="${ns}/base_link"/>
-        <child link="${ns}/chassis"/>
+    <joint name="chassis_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="chassis"/>
         <origin xyz="0 0 0"/>
     </joint>
     
-    <link name="${ns}/chassis">
+    <link name="chassis">
         <visual>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
@@ -95,8 +94,8 @@
         <origin xyz="-0.134 -0.10815 -0.09222" rpy="0 -${pi/4} -${pi/2}" />
     </xacro:thruster>
 
-    <!-- other Gazebo plugins -->
     <xacro:if value="$(arg simulation)">
+        <xacro:include filename="$(find rov_description)/description/hydrodynamics.xacro"/>
         <gazebo>
             <plugin 
                 filename="gz-sim-joint-state-publisher-system"
@@ -108,20 +107,21 @@
                 name="gz::sim::systems::OdometryPublisher">
                 <odom_frame>world</odom_frame>
                 <dimensions>3</dimensions>
-                <robot_base_frame>${ns}/base_link</robot_base_frame>
+                <robot_base_frame>base_link</robot_base_frame>
                 <odom_publish_frequency>20</odom_publish_frequency>
-                <!-- <odom_topic>${ns}/odometry</odom_topic> -->
                 <dimensions>3</dimensions>
+                <gaussian_noise>0.5</gaussian_noise>
             </plugin>
             
-            <plugin
+            <!-- If you want to publish world -> base_link transform -->
+            <!-- <plugin
                 filename="gz-sim-pose-publisher-system"
                 name="gz::sim::systems::PosePublisher">
                 <publish_link_pose>false</publish_link_pose>
                 <publish_collision_pose>false</publish_collision_pose>
                 <publish_visual_pose>false</publish_visual_pose>
                 <publish_nested_model_pose>true</publish_nested_model_pose>
-            </plugin>
+            </plugin> -->
         </gazebo>
     </xacro:if>
 

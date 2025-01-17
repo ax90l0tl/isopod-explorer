@@ -35,13 +35,13 @@ def generate_launch_description():
 
     set_env_vars_resources = AppendEnvironmentVariable(
             'GZ_SIM_RESOURCE_PATH',
-            os.path.join(get_package_share_directory('rov_sim'),'meshes')
+            os.path.join(get_package_share_directory('rov_description'),'meshes')
             )
     
     
     robot_desc = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory(package_name),'launch','demo.launch.py'
+                    get_package_share_directory('rov_description'),'launch','demo.launch.py'
                 )]), launch_arguments={'use_sim_time': 'true'}.items()
     )
     
@@ -51,14 +51,14 @@ def generate_launch_description():
         PythonLaunchDescriptionSource(
             os.path.join(ros_gz_sim, 'launch', 'gz_sim.launch.py')
         ),
-        launch_arguments={'gz_args': ['-r -s -v4 ', world], 'on_exit_shutdown': 'true'}.items()
+        launch_arguments={'gz_args': ['-r -s -v1 ', world], 'on_exit_shutdown': 'true'}.items()
     )
     
     gzclient_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             os.path.join(ros_gz_sim, 'launch', 'gz_sim.launch.py')
         ),
-        launch_arguments={'gz_args': '-g -v4 '}.items()
+        launch_arguments={'gz_args': '-g -v1 '}.items()
     )
 
     bridge_params = os.path.join(
@@ -75,6 +75,7 @@ def generate_launch_description():
             '-p',
             f'config_file:={bridge_params}',
         ],
+        parameters=[{'use_sim_time': True}],
         output='screen',
     )
 
@@ -95,8 +96,11 @@ def generate_launch_description():
                                    ],
                         output='screen')
 
-    sim_comms = Node(package='rov_sim', executable='sim_comms',
-                    output='screen')
+    sim_comms = Node(
+        package='rov_sim', 
+        executable='sim_comms',
+        output='screen',
+        parameters=[{'use_sim_time': True}],)
 
     # gives all nodes the namespace isopod (recursive)
     sim_w_namespace = GroupAction(
@@ -119,7 +123,7 @@ def generate_launch_description():
     # ld.add_action(start_gazebo_ros_image_bridge_cmd)
     ld.add_action(namespace_arg)
     # ld.add_action(sim_w_namespace)
-    # ld.add_action(set_env_vars_resources)
+    ld.add_action(set_env_vars_resources)
     ld.add_action(world_arg)
     ld.add_action(gzserver_cmd)
     ld.add_action(gzclient_cmd)

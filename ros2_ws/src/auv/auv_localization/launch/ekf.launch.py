@@ -21,15 +21,41 @@ import yaml
 from launch.substitutions import EnvironmentVariable
 import pathlib
 import launch.actions
+from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 
 def generate_launch_description():
     return LaunchDescription([
-        launch_ros.actions.Node(
+        Node(
             package='robot_localization',
             executable='ekf_node',
             name='ekf_filter_node',
             output='screen',
-            parameters=[os.path.join(get_package_share_directory("auv_localization"), 'config', 'ekf.yaml')],
+            parameters=[os.path.join(get_package_share_directory("auv_localization"), 'config', 'ekf.yaml'),
+                        {'use_sim_time': True}],
            ),
+        Node(
+        package="tf2_ros",               
+        executable="static_transform_publisher",
+        arguments = ['--x', '0',
+                        '--y', '0',
+                        '--z', '0', 
+                        '--yaw', '0', 
+                        '--pitch', '0', 
+                        '--roll', '0', 
+                        '--frame-id', 'odom', 
+                        '--child-frame-id', 'base_link']
+        ),
+        Node(
+            package="tf2_ros",               
+            executable="static_transform_publisher",
+            arguments = ['--x', '0',
+                            '--y', '0',
+                            '--z', '0', 
+                            '--yaw', '0', 
+                            '--pitch', '0', 
+                            '--roll', '0', 
+                            '--frame-id', 'map', 
+                            '--child-frame-id', 'odom']
+        ),
 ])

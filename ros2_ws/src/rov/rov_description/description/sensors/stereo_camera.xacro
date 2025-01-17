@@ -3,12 +3,12 @@
 
     <xacro:macro name="camera" params="name parent *origin">
         <joint name="camera_joint" type="revolute">
-            <parent link="${ns}/${parent}"/>
-            <child link="${ns}/${name}_link"/>
+            <parent link="${parent}"/>
+            <child link="${name}_link"/>
             <xacro:insert_block name="origin" />
         </joint>
     
-        <link name="${ns}/${name}">
+        <link name="${name}">
             <visual>
                 <geometry>
                     <box size="0.010 0.03 0.03"/>
@@ -56,7 +56,7 @@
                       </noise>
                 </camera>
                 <visualize>true</visualize>
-                <topic>${ns}/image</topic>
+                <topic>image</topic>
                 <enable_metrics>false</enable_metrics> 
                 <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
                     <ros>

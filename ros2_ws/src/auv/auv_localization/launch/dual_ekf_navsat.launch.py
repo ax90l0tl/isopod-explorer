@@ -13,6 +13,8 @@
 
 from launch import LaunchDescription
 import launch_ros.actions
+from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument
 import os
 import yaml
 from launch.substitutions import EnvironmentVariable
@@ -22,9 +24,9 @@ from launch.actions import DeclareLaunchArgument
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
-    robot_localization_dir = get_package_share_directory('robot_localization')
-    parameters_file_dir = os.path.join(robot_localization_dir, 'params')
-    parameters_file_path = os.path.join(parameters_file_dir, 'dual_ekf_navsat_example.yaml')
+    robot_localization_dir = get_package_share_directory('auv_localization')
+    parameters_file_dir = os.path.join(robot_localization_dir, 'config')
+    parameters_file_path = os.path.join(parameters_file_dir, 'dual_ekf_navsat.yaml')
     os.environ['FILE_PATH'] = str(parameters_file_dir)
     return LaunchDescription([
         launch.actions.DeclareLaunchArgument(
@@ -39,7 +41,9 @@ def generate_launch_description():
             executable='ekf_node', 
             name='ekf_filter_node_odom',
 	        output='screen',
-            parameters=[parameters_file_path],
+            parameters=[parameters_file_path,
+                        {'use_sim_time': True},
+                        ],
             remappings=[('odometry/filtered', 'odometry/local')]           
            ),
     launch_ros.actions.Node(
@@ -47,7 +51,9 @@ def generate_launch_description():
             executable='ekf_node', 
             name='ekf_filter_node_map',
 	        output='screen',
-            parameters=[parameters_file_path],
+            parameters=[parameters_file_path,
+                        {'use_sim_time': True},
+                        ],
             remappings=[('odometry/filtered', 'odometry/global')]
            ),           
     launch_ros.actions.Node(
@@ -55,12 +61,38 @@ def generate_launch_description():
             executable='navsat_transform_node', 
             name='navsat_transform',
 	        output='screen',
-            parameters=[parameters_file_path],
-            remappings=[('imu', 'imu/data'),
-                        ('gps/fix', 'gps/fix'), 
+            parameters=[parameters_file_path,
+                        {'use_sim_time': True},
+                        ],
+            remappings=[('imu/data', 'imu'),
+                        ('gps/fix', 'gps/ros'), 
                         ('gps/filtered', 'gps/filtered'),
                         ('odometry/gps', 'odometry/gps'),
                         ('odometry/filtered', 'odometry/global')]           
 
-           )           
+           ),
+    Node(
+        package="tf2_ros",               
+        executable="static_transform_publisher",
+        arguments = ['--x', '0',
+                        '--y', '0',
+                        '--z', '0', 
+                        '--yaw', '0', 
+                        '--pitch', '0', 
+                        '--roll', '0', 
+                        '--frame-id', 'odom', 
+                        '--child-frame-id', 'base_link']
+        ),
+        Node(
+            package="tf2_ros",               
+            executable="static_transform_publisher",
+            arguments = ['--x', '0',
+                            '--y', '0',
+                            '--z', '0', 
+                            '--yaw', '0', 
+                            '--pitch', '0', 
+                            '--roll', '0', 
+                            '--frame-id', 'map', 
+                            '--child-frame-id', 'odom']
+        ),           
 ])

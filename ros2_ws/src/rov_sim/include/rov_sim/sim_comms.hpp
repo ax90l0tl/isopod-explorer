@@ -23,6 +23,7 @@ public:
 private:
     vector<rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr> thruster_pub;
     rclcpp::Publisher<geometry_msgs::msg::PoseWithCovarianceStamped>::SharedPtr depth_pub;
+    rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr gps_vel_pub;
     rclcpp::Publisher<sensor_msgs::msg::NavSatFix>::SharedPtr gps_pub;
     rclcpp::Subscription<rov_msgs::msg::ThrusterCommand>::SharedPtr thruster_sub;
     rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub;
@@ -33,6 +34,9 @@ private:
     void gps_Callback(const sensor_msgs::msg::NavSatFix::SharedPtr msg);
     rclcpp::TimerBase::SharedPtr depth_timer;
     nav_msgs::msg::Odometry odom;
+
+    double depth_cov;
+    vector<double> gps_cov;
 };
 
 #endif

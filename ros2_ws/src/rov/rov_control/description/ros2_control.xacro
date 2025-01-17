@@ -1,59 +1,123 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <ros2_control name="GazeboSystem" type="system">
+    <link name="x_link">
+    </link>
+    <link name="y_link">
+    </link>
+    <link name="z_link">
+    </link>
+    <link name="rx_link">
+    </link>
+    <link name="ry_link">
+    </link>
+    <link name="rz_link">
+    </link>
+    <!-- Cartesian Joints -->
+    <joint name="x"
+            type="continuous">
+    <parent link="base_link" />
+    <child link="x_link" />
+    </joint>
+
+    <joint name="y"
+            type="continuous">
+    <parent link="base_link" />
+    <child link="y_link" />
+    </joint>
+
+    <joint name="z"
+            type="continuous">
+    <parent link="base_link" />
+    <child link="z_link" />
+    </joint>
+
+    <joint name="rx"
+            type="continuous">
+    <parent link="base_link" />
+    <child link="rx_link" />
+    </joint>
+
+    <joint name="ry"
+            type="continuous">
+    <parent link="base_link" />
+    <child link="ry_link" />
+    </joint>
+
+    <joint name="rz"
+            type="continuous">
+    <parent link="base_link" />
+    <child link="rz_link" />
+    </joint>
+
+    <ros2_control name="demo_hardware"
+                type="system">
+
         <hardware>
-            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-            <joint name="x_acceleration">
-                <command_interface name="effort">
-                    <param name="min">-10.0</param>
-                    <param name="max">10.0</param>
-                </command_interface>
-                <state_interface name="acceleration"/>
-            </joint>
-            <joint name="y_acceleration">
-                <command_interface name="effort">
-                    <param name="min">-10.0</param>
-                    <param name="max">10.0</param>
-                </command_interface>
-                <state_interface name="acceleration"/>
-            </joint>
-            <joint name="z_position">
-                <command_interface name="position">
-                </command_interface>
-                <state_interface name="acceleration"/>
-                <state_interface name="position"/>
-            </joint>
-            <joint name="roll">
-                <command_interface name="position">
-                    <param name="min">-1.0</param>
-                    <param name="max">1.0</param>
-                </command_interface>
-                <state_interface name="orientation"/>
-                <state_interface name="velocity"/>
-            </joint>
-            <joint name="pitch">
-                <command_interface name="effort">
-                    <param name="min">-1.0</param>
-                    <param name="max">1.0</param>
-                </command_interface>
-                <state_interface name="orientation"/>
-                <state_interface name="velocity"/>
-            </joint>
-            <joint name="yaw">
-                <command_interface name="effort">
-                    <param name="min">-1.0</param>
-                    <param name="max">1.0</param>
-                </command_interface>
-                <state_interface name="orientation"/>
-                <state_interface name="velocity"/>
-            </joint>
+            <plugin>mock_components/GenericSystem</plugin>
+            <param name="calculate_dynamics">false</param>
         </hardware>
+
+        <joint name="x">
+            <state_interface name="position">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <command_interface name="effort" />
+        </joint>
+
+        <joint name="y">
+            <state_interface name="position">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <command_interface name="effort" />
+        </joint>
+
+        <joint name="z">
+            <state_interface name="position">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <command_interface name="effort" />
+        </joint>
+
+        <joint name="rx">
+            <state_interface name="position">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <command_interface name="effort" />
+        </joint>
+
+        <joint name="ry">
+            <state_interface name="position">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <command_interface name="effort" />
+        </joint>
+
+        <joint name="rz">
+            <state_interface name="position">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity">
+            <param name="initial_value">0.0</param>
+            </state_interface>
+            <command_interface name="effort" />
+        </joint>
+
     </ros2_control>
 
-    <gazebo>
-        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-            <parameters>...to be filled in soon!...</parameters>
-        </plugin>
-    </gazebo>
 </robot>

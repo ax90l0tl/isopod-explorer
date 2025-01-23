@@ -82,7 +82,7 @@ def generate_launch_description():
     start_gazebo_ros_image_bridge_cmd = Node(
         package='ros_gz_image',
         executable='image_bridge',
-        arguments=['/camera/image_raw'],
+        arguments=['/world/default/model/robot/link/camera/sensor/camera/image'],
         output='screen',
     )
 
@@ -96,11 +96,12 @@ def generate_launch_description():
                                    ],
                         output='screen')
 
+    sim_comms_params = os.path.join(get_package_share_directory('rov_sim'), 'config', 'sim_comms.yaml')
     sim_comms = Node(
         package='rov_sim', 
         executable='sim_comms',
         output='screen',
-        parameters=[{'use_sim_time': True}],)
+        parameters=[sim_comms_params],)
 
     # gives all nodes the namespace isopod (recursive)
     sim_w_namespace = GroupAction(
@@ -120,7 +121,7 @@ def generate_launch_description():
     ld.add_action(spawn_entity)
     ld.add_action(robot_desc)
     ld.add_action(sim_comms)
-    # ld.add_action(start_gazebo_ros_image_bridge_cmd)
+    ld.add_action(start_gazebo_ros_image_bridge_cmd)
     ld.add_action(namespace_arg)
     # ld.add_action(sim_w_namespace)
     ld.add_action(set_env_vars_resources)

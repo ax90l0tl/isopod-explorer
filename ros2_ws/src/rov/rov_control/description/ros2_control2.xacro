@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <link name="control_link">
+    </link>
+    <joint name="control_joint"
+        type="floating">
+        <parent link="base_link" />
+        <child link="control_link" />
+    </joint>
+
+    <ros2_control name="demo_hardware"
+        type="system">
+
+        <hardware>
+            <plugin>mock_components/GenericSystem</plugin>
+            <param name="calculate_dynamics">false</param>
+        </hardware>
+
+        <joint name="control_joint">
+            <!-- Position interfaces -->
+            <state_interface name="position.x">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="position.y">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="position.z">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="position.roll">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="position.pitch">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="position.yaw">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+
+            <!-- Velocity interfaces -->
+            <state_interface name="velocity.x">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity.y">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity.z">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity.roll">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity.pitch">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+            <state_interface name="velocity.yaw">
+                <param name="initial_value">0.0</param>
+            </state_interface>
+
+            <!-- Effort interfaces -->
+            <command_interface name="effort.x" />
+            <command_interface name="effort.y" />
+            <command_interface name="effort.z" />
+            <command_interface name="effort.roll" />
+            <command_interface name="effort.pitch" />
+            <command_interface name="effort.yaw" />
+        </joint>
+    </ros2_control>
+
+</robot>

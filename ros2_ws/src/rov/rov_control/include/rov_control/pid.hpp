@@ -7,68 +7,47 @@
 #include <geometry_msgs/msg/twist.hpp>
 #include "rov_msgs/msg/command.hpp"
 #include <geometry_msgs/msg/wrench_stamped.hpp>
-#include <geometry_msgs/msg/pose.hpp>
-#include <control_toolbox/pid.hpp>
 #include <algorithm>
 #include <iostream>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/utils.h>
 #include "rcl_interfaces/msg/set_parameters_result.hpp"
+#include "controller_interface/controller_interface.hpp"
+#include "controller_interface/chainable_controller_interface.hpp"
+#include "rclcpp_lifecycle/state.hpp"
 
-namespace controller
+namespace rov_control
 {
-
-  class ControllerNode : public rclcpp::Node
+  class PID_6DOF : public controller_interface::ChainableControllerInterface
   {
   public:
-    ControllerNode();
+    PID_6DOF();
+    controller_interface::CallbackReturn on_init() override;
 
+    controller_interface::InterfaceConfiguration command_interface_configuration() const override;
+
+    controller_interface::InterfaceConfiguration state_interface_configuration() const override;
+
+    controller_interface::CallbackReturn on_cleanup(
+        const rclcpp_lifecycle::State &previous_state) override;
+
+    controller_interface::CallbackReturn on_configure(
+        const rclcpp_lifecycle::State &previous_state) override;
+
+    controller_interface::CallbackReturn on_activate(
+        const rclcpp_lifecycle::State &previous_state) override;
+
+    controller_interface::CallbackReturn on_deactivate(
+        const rclcpp_lifecycle::State &previous_state) override;
+
+    controller_interface::return_type update_reference_from_subscribers(
+        const rclcpp::Time &time, const rclcpp::Duration &period) override;
+
+    controller_interface::return_type update_and_write_commands(
+        const rclcpp::Time &time, const rclcpp::Duration &period) override;
+
+  protected:
   private:
-    // publishers
-
-    rclcpp::Publisher<geometry_msgs::msg::WrenchStamped>::SharedPtr pubControlEffort;
-
-    rclcpp::Time prevTime;
-
-    // implementation
-    control_toolbox::Pid linear_x;
-    control_toolbox::Pid linear_y;
-    control_toolbox::Pid linear_z;
-
-    control_toolbox::Pid angular_x;
-    control_toolbox::Pid angular_y;
-    control_toolbox::Pid angular_z;
-
-    rclcpp::TimerBase::SharedPtr pubTimer_;
-
-    // bur_rov_msgs::msg::Command command;
-    geometry_msgs::msg::Pose pose_state;
-    geometry_msgs::msg::Pose pose_setpoint;
-    geometry_msgs::msg::Twist twist_state;
-    geometry_msgs::msg::Twist twist_setpoint;
-
-    //  callbacks
-    rcl_interfaces::msg::SetParametersResult parametersCallback(
-        const std::vector<rclcpp::Parameter> &parameters);
-    rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr param_callback;
-    void currentCommandCallback(const rov_msgs::msg::Command::SharedPtr msg);
-    void set_constants();
-    void publishState();
-
-    rclcpp::Time lastTime;
-    bool active = false;
-    bool new_params = false;
-    bool using_joy = true;
-    bool use_command_target = false;
-    tf2::Vector3 setpoint_angle;
-    tf2::Vector3 state_angle;
-    bool depth_hold = false;
-    bool yaw_hold = false;
-    bool roll_hold = false;
-    bool pitch_hold = false;
-    double yaw_hold_pos;
-    double roll_hold_pos = 0;
-    double pitch_hold_pos = 0;
   };
 }
 

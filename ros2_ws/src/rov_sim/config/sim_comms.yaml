@@ -1,0 +1,13 @@
+sim_comms:
+  ros__parameters:
+    use_sim_time: true
+    depth_rate: 30
+    depth_topic: "depth_sensor"
+    gps_topic: "gps/ros"
+    gps_vel_topic: "gps/vel/ros"
+    gps_topic_gz: "gps"
+    odom_topic: "odom"
+    thruster_topic: "thruster_command"
+    depth_cov: 0.4
+    gps_cov: [0.5, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5]
+    n_thrusters: 6

@@ -28,7 +28,8 @@
     <xacro:include filename="$(find rov_description)/description/sensors/imu.xacro"/>
     <xacro:include filename="$(find rov_description)/description/sensors/depth_sensor.xacro"/>
     <xacro:include filename="$(find rov_description)/description/sensors/gps.xacro"/>
-    <xacro:include filename="$(find rov_control)/description/ros2_control.xacro"/>
+    <xacro:include filename="$(find rov_description)/description/sensors/camera.xacro"/>
+    <!-- <xacro:include filename="$(find rov_control)/description/ros2_control.xacro"/> -->
 
     <link name="base_link">
     </link>

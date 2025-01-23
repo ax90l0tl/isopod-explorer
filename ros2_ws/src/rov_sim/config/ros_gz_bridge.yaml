@@ -11,12 +11,19 @@
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
 
+# - ros_topic_name: "camera_joint_state"
+#   gz_topic_name: "/model/robot/joint/camera_joint/0/cmd_pos"
+#   ros_type_name: "sensor_msgs/msg/JointState"
+#   gz_type_name: "gz.msgs.Model"
+#   direction: ROS_TO_GZ
+
 - ros_topic_name: "odom"
   gz_topic_name: "/model/robot/odometry_with_covariance"
   ros_type_name: "nav_msgs/msg/Odometry"
   gz_type_name: "gz.msgs.OdometryWithCovariance"
   direction: GZ_TO_ROS
 
+# uncomment to view robot sim position in rviz, otherwise interferes with localization view in rviz
 # - ros_topic_name: "tf"
 #   gz_topic_name: "/model/robot/pose"
 #   ros_type_name: "tf2_msgs/msg/TFMessage"

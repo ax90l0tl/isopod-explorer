@@ -11,13 +11,13 @@
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
 
-# - ros_topic_name: "camera_joint_state"
-#   gz_topic_name: "/model/robot/joint/camera_joint/0/cmd_pos"
-#   ros_type_name: "sensor_msgs/msg/JointState"
-#   gz_type_name: "gz.msgs.Model"
-#   direction: ROS_TO_GZ
+- ros_topic_name: "camera_joint_state"
+  gz_topic_name: "/model/robot/joint/camera_joint/0/cmd_pos"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: ROS_TO_GZ
 
-- ros_topic_name: "odom"
+- ros_topic_name: "odom_gz"
   gz_topic_name: "/model/robot/odometry_with_covariance"
   ros_type_name: "nav_msgs/msg/Odometry"
   gz_type_name: "gz.msgs.OdometryWithCovariance"

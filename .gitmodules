@@ -12,3 +12,7 @@
 	path = ros2_ws/src/micro_ros_setup
 	url = https://github.com/micro-ROS/micro_ros_setup.git
 	branch = foxy
+[submodule "ros2_ws/src/ros_gz"]
+	path = ros2_ws/src/ros_gz
+	url = https://github.com/gazebosim/ros_gz.git
+	branch = jazzy

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<sdf version="1.6">
+<sdf version="1.11">
   <world name="default">
     <plugin
       filename="gz-sim-physics-system"
@@ -26,10 +26,17 @@
     </plugin>
 
     <plugin
+      filename="gz-sim-altimeter-system"
+      name="gz::sim::systems::Altimeter">
+    </plugin>
+
+    <plugin
       filename="gz-sim-buoyancy-system"
       name="gz::sim::systems::Buoyancy">
+      <!-- <uniform_fluid_density>1000</uniform_fluid_density> -->
+      <!-- <default_density>1000</default_density> -->
+
       <graded_buoyancy>
-        <!-- <uniform_fluid_density>1000</uniform_fluid_density> -->
         <!-- NOT CONSIDERING AIR -->
         <default_density>1000</default_density>
         <density_change>
@@ -39,7 +46,7 @@
       </graded_buoyancy>
     </plugin>
 
-    <!-- <model name="water_plane">
+    <model name="water_plane">
       <static>true</static>
       <link name="link">
         <visual name="water_plane">
@@ -56,13 +63,13 @@
           </material>
         </visual>
       </link>
-    </model> -->
+    </model>
 
-    <include>
+    <!-- <include>
       <uri>
         https://fuel.gazebosim.org/1.0/OpenRobotics/models/Coast Water
       </uri>
-    </include>
+    </include> -->
 
     <include>
       <uri>
@@ -73,11 +80,14 @@
     <scene>
       <shadows>false</shadows>
       <!-- For turquoise ambient -->
-      <ambient>0.0 1.0 1.0</ambient>
-      <background>0.0 0.7 0.8</background>
+      <!-- <ambient>0.0 1.0 1.0</ambient> -->
+      <!-- <background>0.0 0.7 0.8</background> -->
     </scene>
 
-
+    <plugin
+      filename="gz-sim-navsat-system"
+      name="gz::sim::systems::NavSat">
+    </plugin>
 
     <spherical_coordinates>
       <surface_model>EARTH_WGS84</surface_model>
@@ -88,13 +98,9 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
 
-    <plugin
-      filename="gz-sim-navsat-system"
-      name="gz::sim::systems::NavSat">
-    </plugin>
 
     <physics type="ode">
-      <real_time_update_rate>50.0</real_time_update_rate>
+      <real_time_update_rate>100.0</real_time_update_rate>
       <max_step_size>0.01</max_step_size>
       <real_time_factor>1.0</real_time_factor>
     </physics>

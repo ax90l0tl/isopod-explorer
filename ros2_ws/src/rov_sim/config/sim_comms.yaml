@@ -6,8 +6,8 @@ sim_comms:
     gps_topic: "gps/ros"
     gps_vel_topic: "gps/vel/ros"
     gps_topic_gz: "gps"
-    odom_topic: "odom"
+    odom_topic: "odom_gz"
     thruster_topic: "thruster_command"
-    depth_cov: 0.4
+    depth_cov: 0.0004
     gps_cov: [0.5, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5]
     n_thrusters: 6

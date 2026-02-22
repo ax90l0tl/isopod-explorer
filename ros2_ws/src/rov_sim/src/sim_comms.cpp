@@ -66,12 +66,12 @@ void Sim_comms_node::depth_Callback()
     // Covariance values are taken from https://bluerobotics.com/store/sensors-cameras/sensors/bar30-sensor-r1/
     // but not sure how correctly I filled out the matrix
     msg.pose.pose.position.z = odom.pose.pose.position.z;
-    msg.pose.covariance = {0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 0, 0, 0,
+    msg.pose.covariance = {1e-9, 0, 0, 0, 0, 0,
+                           0, 1e-9, 0, 0, 0, 0,
                            0, 0, depth_cov, 0, 0, 0,
-                           0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 0, 0, 0,
-                           0, 0, 0, 0, 0, 0};
+                           0, 0, 0, 1e-9, 0, 0,
+                           0, 0, 0, 0, 1e-9, 0,
+                           0, 0, 0, 0, 0, 1e-9};
     depth_pub->publish(msg);
 }
 

@@ -21,9 +21,11 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(rov_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-
+find_package(gz-cmake REQUIRED)
+find_package(gz-sensors REQUIRED)
 include_directories(include/${PROJECT_NAME})
 
+# ROS Stuff
 add_executable(sim_comms src/sim_comms.cpp)
 ament_target_dependencies(sim_comms rclcpp std_msgs geometry_msgs nav_msgs rov_msgs sensor_msgs)
 
@@ -35,6 +37,12 @@ target_include_directories(
 install(TARGETS
   sim_comms
   DESTINATION lib/${PROJECT_NAME})
+
+# GZ_SIM Stuff
+add_library(${PROJECT_NAME} SHARED src/depth_sensor.cpp)
+target_link_libraries(${PROJECT_NAME}
+  PUBLIC gz-sensors::gz-sensors)
+
 
 
 if(BUILD_TESTING)

@@ -82,7 +82,7 @@ def generate_launch_description():
     start_gazebo_ros_image_bridge_cmd = Node(
         package='ros_gz_image',
         executable='image_bridge',
-        arguments=['/world/default/model/robot/link/camera/sensor/camera/image'],
+        arguments=['/camera/image_raw'],
         output='screen',
     )
 

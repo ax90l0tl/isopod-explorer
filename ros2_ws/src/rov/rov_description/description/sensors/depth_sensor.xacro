@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <xacro:macro name="depth_sensor" params="name parent *origin">
         <link name="${name}">
@@ -10,10 +10,12 @@
             <parent link="${parent}" />
             <child link="${name}" />
         </joint>
+
+        <!-- <xacro:if value="$(arg simulation)"> -->
+        <!-- </xacro:if> -->
     </xacro:macro>
 
     <xacro:depth_sensor name="Bar30" parent="chassis">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0" />
     </xacro:depth_sensor>
-
 </robot>

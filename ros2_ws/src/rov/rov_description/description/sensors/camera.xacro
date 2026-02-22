@@ -7,6 +7,7 @@
     <joint name="camera_base_joint" type="fixed">
         <parent link="chassis" />
         <child link="camera_base" />
+        <origin xyz="0.155 0 0" />
     </joint>
 
     <link name="camera">
@@ -32,9 +33,19 @@
 
     <xacro:if value="$(arg simulation)">
         <gazebo>
-            <plugin filename="gz-sim-joint-position-controller-system"
+            <plugin
+                filename="gz-sim-joint-position-controller-system"
                 name="gz::sim::systems::JointPositionController">
                 <joint_name>camera_joint</joint_name>
+                <topic>joint/knee_joint/0/cmd_pos</topic>
+                <p_gain>10.0</p_gain>
+                <i_gain>0.0</i_gain>
+                <d_gain>1.0</d_gain>
+                <i_max>100</i_max>
+                <i_min>-100</i_min>
+                <cmd_max>100</cmd_max>
+                <cmd_min>-100</cmd_min>
+                <cmd_offset>0.0</cmd_offset>
             </plugin>
         </gazebo>
 
@@ -53,6 +64,7 @@
                         <far>20.0</far>
                     </clip>
                 </camera>
+                <topic>/camera/image_raw</topic>
                 <always_on>1</always_on>
                 <update_rate>30</update_rate>
                 <visualize>true</visualize>
